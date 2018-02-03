@@ -14,6 +14,9 @@ var app = express();
 app.use(express.static('public'));
 app.use(express.json());
 
+//http://hack.nuance.mobi/CognitivePlatform/Question?teamKey=<TEAM_KEY>&questi on=<QUESTION_TEXT> 
+
+
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
@@ -41,9 +44,12 @@ app.post("/webhook", async function (request, response) {
   var message = await spark.messages.get(request.body.data.id);
   // message.text contains the text of the message sent to the bot
   console.log(message.text);
-  await spark.messages.create({
-    roomId: message.roomId,
-    text: "Echo: " + message.text
+  var nuanceUrl = "http://hack.nuance.mobi/CognitivePlatform/Question?teamKey=" + process.env.NUANCE_TEAM_KEY + "&question=" + encodeURIComponent(message.text);
+  request(nuanceUrl, {json: true}, (err, res, body) => {
+    spark.messages.create({
+      roomId: message.roomId,
+      text: "Echo: " + body
+    });
   });
 });
 
