@@ -55,11 +55,18 @@ app.post("/webhook", async function (request, response) {
 });
 
 function bestAnswer (body) {
-  var best;
+  var best = body.answers[0];
   
-  if(bo)
+  for(var i=0; i< Math.min(body.answers.length, 3); i++)
+  {
+    var ans = body.answers[i];
+    if(ans.score>50 && ans.summary.length<best.length)
+    {
+      best = ans;
+    }
+  }
   
-  return best;
+  return best.summary;
 }
 
 async function removeAllWebhooks() {
