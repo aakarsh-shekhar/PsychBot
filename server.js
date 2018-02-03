@@ -4,6 +4,7 @@
 // init project
 var express = require('express');
 var spark = require('ciscospark/env');
+var request = require('request');
 var app = express();
 
 // we've started you off with Express, 
