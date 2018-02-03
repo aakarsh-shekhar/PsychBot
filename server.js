@@ -29,18 +29,21 @@ app.post("/dreams", function (request, response) {
 });
 
 // Simple in-memory store for now
-var dreams = [
-  "Find and count some sheep",
-  "Climb a really tall mountain",
-  "Wash the dishes"
-];
+var dreams;
 
 app.post("/webhook", async function (request, response) {
   console.log(request.body);
   response.sendStatus(200);
+  if (request.body.data.personEmail === "psychbot@sparkbot.io") {
+    return;
+  }
   var message = await spark.messages.get(request.body.data.id);
   // message.text contains the text of the message sent to the bot
   console.log(message.text);
+  await spark.messages.create({
+    roomId: message.roomId,
+    text: "Echo: " + message.text
+  });
 });
 
 async function removeAllWebhooks() {
@@ -64,5 +67,5 @@ async function enableSparkWebhook() {
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
-  enableSparkWebhook();
+  //enableSparkWebhook(); not needed after initial registration
 });
