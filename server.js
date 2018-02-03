@@ -3,6 +3,7 @@
 
 // init project
 var express = require('express');
+var spark = require('ciscospark/env');
 var app = express();
 
 // we've started you off with Express, 
@@ -33,7 +34,12 @@ var dreams = [
   "Wash the dishes"
 ];
 
+function enableSparkWebhook() {
+  spark.webhooks.create(
+}
+
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
+  enableSparkWebhook();
 });
