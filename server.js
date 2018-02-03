@@ -11,6 +11,7 @@ var app = express();
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
+app.use(express.json());
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function (request, response) {
@@ -34,9 +35,12 @@ var dreams = [
   "Wash the dishes"
 ];
 
-app.post("/webhook", function (request, response) {
-  console.log(request);
+app.post("/webhook", async function (request, response) {
+  console.log(request.body);
   response.sendStatus(200);
+  var message = await spark.messages.get(request.body.data.id);
+  // message.text contains the text of the message sent to the bot
+  console.log(message.text);
 });
 
 async function removeAllWebhooks() {
@@ -54,7 +58,7 @@ async function enableSparkWebhook() {
     "targetUrl": "https://" + process.env.PROJECT_DOMAIN + ".glitch.me/webhook",
     "name": "Main webhook"
   });
-  console.log(webhook);
+  //console.log(webhook);
 }
 
 // listen for requests :)
