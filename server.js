@@ -57,7 +57,7 @@ app.post("/webhook", async function (request, response) {
 function bestAnswer (body) {
   var best = body.answers[0].summary;
   
-  for(var i=0; i<body.answers.length; i++)
+  for(var i=0; i< Math.min(body.answers.length, 3); i++)
   {
     var ans = body.answers[i];
     if(ans.score>50 && ans.summary.length<best.length)
