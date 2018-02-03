@@ -55,18 +55,21 @@ app.post("/webhook", async function (request, response) {
 });
 
 function bestAnswer (body) {
-  var best = body.answers[0];
+  var best = body.answers[0].summary;
   
-  for(var i=0; i< Math.min(body.answers.length, 3); i++)
+  for(var i=0; i<body.answers.length; i++)
   {
     var ans = body.answers[i];
     if(ans.score>50 && ans.summary.length<best.length)
     {
-      best = ans;
+      best = ans.summary;
     }
   }
   
-  return best.summary;
+  if(best.length>1000)
+    best = best.substring(0, best.indexOf(".")+1);
+  
+  return best;
 }
 
 async function removeAllWebhooks() {
