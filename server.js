@@ -35,7 +35,11 @@ var dreams = [
 ];
 
 function enableSparkWebhook() {
-  spark.webhooks.create(
+  // https://ciscospark.github.io/spark-js-sdk/api/#webhookscreate
+  spark.webhooks.create({
+    "resource": "messages",
+    "event": "created",
+    "targetUrl": "
 }
 
 // listen for requests :)
