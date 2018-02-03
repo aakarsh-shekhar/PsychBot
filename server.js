@@ -4,7 +4,7 @@
 // init project
 var express = require('express');
 var spark = require('ciscospark/env');
-var request = require('request');
+var request_ = require('request');
 var app = express();
 
 // we've started you off with Express, 
@@ -45,13 +45,22 @@ app.post("/webhook", async function (request, response) {
   // message.text contains the text of the message sent to the bot
   console.log(message.text);
   var nuanceUrl = "http://hack.nuance.mobi/CognitivePlatform/Question?teamKey=" + process.env.NUANCE_TEAM_KEY + "&question=" + encodeURIComponent(message.text);
-  request(nuanceUrl, {json: true}, (err, res, body) => {
+  request_(nuanceUrl, {json: true}, (err, res, body) => {
+    
     spark.messages.create({
       roomId: message.roomId,
-      text: "Echo: " + body
+      text: "Answer: " + bestAnswer(body)
     });
   });
 });
+
+function bestAnswer (body) {
+  var best;
+  
+  if(bo)
+  
+  return best;
+}
 
 async function removeAllWebhooks() {
   var webhooks = await spark.webhooks.list({});
