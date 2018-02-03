@@ -34,8 +34,15 @@ var dreams = [
   "Wash the dishes"
 ];
 
+app.post("/webhook", function (request, response) {
+  console.log(request);
+  response.sendStatus(200);
+});
+
 async function removeAllWebhooks() {
-  var webhooks = await 
+  var webhooks = await spark.webhooks.list({});
+  
+  return Promise.all(webhooks.items.map((a) => spark.webhooks.remove(a)));
 }
 
 async function enableSparkWebhook() {
