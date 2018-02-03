@@ -34,12 +34,20 @@ var dreams = [
   "Wash the dishes"
 ];
 
-function enableSparkWebhook() {
+async function removeAllWebhooks() {
+  var webhooks = await 
+}
+
+async function enableSparkWebhook() {
   // https://ciscospark.github.io/spark-js-sdk/api/#webhookscreate
-  spark.webhooks.create({
+  await removeAllWebhooks();
+  var webhook = await spark.webhooks.create({
     "resource": "messages",
     "event": "created",
-    "targetUrl": "
+    "targetUrl": "https://" + process.env.PROJECT_DOMAIN + ".glitch.me/webhook",
+    "name": "Main webhook"
+  });
+  console.log(webhook);
 }
 
 // listen for requests :)
