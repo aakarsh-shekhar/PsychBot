@@ -97,7 +97,21 @@ async function enableSparkWebhook() {
   //console.log(webhook);
 }
 
-function addUserToGroup(userEmail, groupName) {
+async function getOrCreateGroupForName(groupName) {
+  try {
+    return await spark.rooms.get({title: groupName});
+  } catch (e) {
+    return await spark.rooms.create({title: groupName});
+  }
+}
+
+async function addUserToGroup(userEmail, groupName) {
+  var group = await getOrCreateGroupForName(groupName);
+  var membership = await spark.memberships.create({personEmail: userEmail, roomId: group.id});
+  spark.messages.create({
+    room:group.id,
+    text: "Welcome to the " + groupName + " group. You can discuss "
+  });
 }
 
 // listen for requests :)
