@@ -48,7 +48,7 @@ app.post("/webhook", async function (request, response) {
   console.log(message.text);
   
   if(message.text.toLowerCase().indexOf(JOIN_GROUP_CMD) == 0) {
-    addUserToGroup(message.personEmail, message.text.substring(JOIN_GROUP_CMD.length));
+    addUserToGroup(message.personEmail, message.text.substring(JOIN_GROUP_CMD.length), message.roomId);
     return;
   }
   var nuanceUrl = "http://hack.nuance.mobi/CognitivePlatform/Question?teamKey=" + process.env.NUANCE_TEAM_KEY + "&question=" + encodeURIComponent(message.text);
@@ -105,7 +105,11 @@ async function getOrCreateGroupForName(groupName) {
   return await spark.rooms.create({title: groupName});
 }
 
-async function addUserToGroup(userEmail, groupName) {
+async function addUserToGroup(userEmail, groupName, orgGroup) {
+      spark.messages.create({
+      roomId: orgGroup,
+      text: "Added you to a support group."
+    });  
   var group = await getOrCreateGroupForName(groupName);
   try {
     var membership = await spark.memberships.create({personEmail: userEmail, roomId: group.id});
