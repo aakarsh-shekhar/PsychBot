@@ -35,6 +35,8 @@ app.post("/dreams", function (request, response) {
 // Simple in-memory store for now
 var dreams;
 
+const JOIN_GROUP_CMD = "i would like to join a support group to ";
+
 app.post("/webhook", async function (request, response) {
   console.log(request.body);
   response.sendStatus(200);
@@ -45,10 +47,10 @@ app.post("/webhook", async function (request, response) {
   // message.text contains the text of the message sent to the bot
   console.log(message.text);
   
-  if()
-     {
-       return;
-     }
+  if(message.text.toLowerCase().indexOf(JOIN_GROUP_CMD) == 0) {
+    addUserToGroup(message.personEmail, message.text.substring(JOIN_GROUP_CMD.length));
+    return;
+  }
   var nuanceUrl = "http://hack.nuance.mobi/CognitivePlatform/Question?teamKey=" + process.env.NUANCE_TEAM_KEY + "&question=" + encodeURIComponent(message.text);
   request_(nuanceUrl, {json: true}, (err, res, body) => {
   
@@ -93,6 +95,9 @@ async function enableSparkWebhook() {
     "name": "Main webhook"
   });
   //console.log(webhook);
+}
+
+function addUserToGroup(userEmail, groupName) {
 }
 
 // listen for requests :)
