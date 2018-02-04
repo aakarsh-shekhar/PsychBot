@@ -35,7 +35,7 @@ app.post("/dreams", function (request, response) {
 // Simple in-memory store for now
 var dreams;
 
-const JOIN_GROUP_CMD = "i would like to join a support group to ";
+const JOIN_GROUP_CMD = "i want to join a support group to ";
 
 app.post("/webhook", async function (request, response) {
   console.log(request.body);
