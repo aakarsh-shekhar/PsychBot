@@ -44,9 +44,14 @@ app.post("/webhook", async function (request, response) {
   var message = await spark.messages.get(request.body.data.id);
   // message.text contains the text of the message sent to the bot
   console.log(message.text);
+  
+  if()
+     {
+       return;
+     }
   var nuanceUrl = "http://hack.nuance.mobi/CognitivePlatform/Question?teamKey=" + process.env.NUANCE_TEAM_KEY + "&question=" + encodeURIComponent(message.text);
   request_(nuanceUrl, {json: true}, (err, res, body) => {
-    
+  
     spark.messages.create({
       roomId: message.roomId,
       text: "Answer: " + bestAnswer(body)
