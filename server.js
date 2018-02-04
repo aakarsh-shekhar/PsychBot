@@ -99,15 +99,20 @@ async function enableSparkWebhook() {
 
 async function getOrCreateGroupForName(groupName) {
   var existing = await spark.rooms.list();
-  for (var i = 0; i < existing.length; i++) {
-    if (existing[i].title === groupName) return existing;
+  for (var i = 0; i < existing.items.length; i++) {
+    if (existing.items[i].title === groupName) return existing.items[i];
   }
   return await spark.rooms.create({title: groupName});
 }
 
 async function addUserToGroup(userEmail, groupName) {
   var group = await getOrCreateGroupForName(groupName);
-  var membership = await spark.memberships.create({personEmail: userEmail, roomId: group.id});
+  try {
+    var membership = await spark.memberships.create({personEmail: userEmail, roomId: group.id});
+  } catch (e) {
+    console.log(e);
+    //already in the room?
+  }
   spark.messages.create({
     roomId: group.id,
     text: "Welcome to the " + groupName + " group. You can share your experiences with others who are going through, or have gone through, the same situation, and can offer advice."
