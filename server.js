@@ -75,6 +75,8 @@ function bestAnswer (body) {
   
   if(best.length>1000)
     best = best.substring(0, best.indexOf(".")+1);
+  if(best.score<30)
+    best = "Sorry I don't understand that";
   
   return best;
 }
